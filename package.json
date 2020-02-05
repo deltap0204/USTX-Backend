@@ -44,6 +44,7 @@
     "mongoose-findorcreate": "^3.0.0",
     "mongoose-unique-validator": "^2.0.1",
     "morgan": "^1.9.1",
+    "node-cron": "^2.0.3",
     "nodejs-base64-encode": "0.0.2",
     "nodemailer": "^4.7.0",
     "passport": "^0.4.0",
