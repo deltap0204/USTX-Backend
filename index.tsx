@@ -17,12 +17,16 @@ server.listen(PORT, () => {
 
     const SCHEDULE_MINUTES = process.env.SCHEDULE_MINUTES;
     const SCHEDULE_HOUR = process.env.SCHEDULE_HOUR;
+    const SCHEDULE_UTC = process.env.SCHEDULE_UTC
 
     cron.schedule(`${SCHEDULE_MINUTES} ${SCHEDULE_HOUR} * * *`, () => {
         let currentDate = moment()
         let endingFundValue = FundValueService.getEndingAdjustmentFundValue(currentDate);
         const shareValue = ShareValueService.getNextDayShareValue(currentDate.clone().add(-1, 'days'));
         console.log(endingFundValue, shareValue)
+    }, {
+        scheduled: true,
+        timezone: SCHEDULE_UTC
     });
 
     console.log(`Listening on port ${PORT} `)
