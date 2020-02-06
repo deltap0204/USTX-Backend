@@ -23,8 +23,8 @@ server.listen(PORT, () => {
         if (err) throw err;
         dbo.collection("environmentDB").findOne({}, function (err, res) {
             if (err) throw err;
-            const { scheduleHour = "" || process.env.SCHEDULE_HOUR, scheduleMinutes = "" || process.env.SCHEDULE_MINUTES, scheduleUtc = "" || process.env.SCHEDULE_UTC } = res
-            cron.schedule(`${scheduleMinutes} ${scheduleHour} * * *`, () => {
+            const { scheduleHour , scheduleMinutes, scheduleUtc } = res
+            cron.schedule(`${scheduleMinutes ? scheduleMinutes : process.env.SCHEDULE_MINUTES} ${scheduleHour ? scheduleHour : process.env.SCHEDULE_HOUR} * * *`, () => {
                 let currentDate = moment()
                 let endingFundValue = FundValueService.getEndingAdjustmentFundValue(currentDate);
                 const shareValue = ShareValueService.getNextDayShareValue(currentDate.clone().add(-1, 'days'));
@@ -33,7 +33,7 @@ server.listen(PORT, () => {
             },
                 {
                     scheduled: true,
-                    timezone: scheduleUtc
+                    timezone: scheduleUtc ? scheduleUtc : process.env.SCHEDULE_UTC 
                 });
             db.close();
         });
