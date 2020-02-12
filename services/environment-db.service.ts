@@ -3,9 +3,6 @@ const FundValueService = require('./fund-value.service.ts').FundValueService;
 const ShareValueService = require('./share-value.service.ts').ShareValueService;
 const EnvironmentDbModel = require('../models/environment_db.model.ts');
 const moment = require('moment');
-const mongoose = require("mongoose");
-
-const url = process.env.REACT_APP_MONGOOSE_URL;
 
 class EnvironmentDBService {
 	async setCron() {
