@@ -3,7 +3,7 @@ console.log('here');
 require('dotenv').config();
 const http = require('http');
 const app = require('./app.tsx');
-const EnvironmentDBService = require('./services/environment_db.service.ts').EnvironmentDBService;
+const EnvironmentDBService = require('./services/environment-db.service.ts').EnvironmentDBService;
 
 const PORT = process.env.PORT || 3001;
 
