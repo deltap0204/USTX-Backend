@@ -50,6 +50,10 @@ router.get('/tokenproperties', function (req, res, next) {
     AdminController.getTokenProperties(req, res, next);
 });
 
+router.post('/updateTokenProperties', function (req, res, next) {
+    AdminController.setTokenProperties(req, res, next);
+});
+
 router.post('/startShareValue', function (req, res, next) {
     AdminController.createStartShareValue(req, res, next);
 
