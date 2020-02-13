@@ -5,14 +5,7 @@ const environmentdbSchema = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
     scheduleHour: String,
     scheduleMinutes: String,
-    scheduleUtc: String,
-    tokenTotal: Number,
-    tokenStartTime: Number,
-    fundInterest: Number,
-    intialShareValue: Number,
-    intialPreFundValue: Number,
-    intialEndingFundValue: Number,
-    depositFeeRate: Number
+    scheduleUtc: String
 }, { timestamps: true });
 
 module.exports = mongoose.model('environmentDB', environmentdbSchema);

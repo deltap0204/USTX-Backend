@@ -3,11 +3,12 @@ const ShareValueService = require('../services/share-value.service.ts').ShareVal
 const FundValueService = require('../services/fund-value.service.ts').FundValueService;
 const CommonsService = require('../services/commons.service.ts').CommonsService;
 const TOKEN_PROPERTIES = require('../models/token-properties.ts').TOKEN_PROPERTIES;
+const TokenPropertiesService = require('../services/token-properties.service.ts').TokenPropertiesService;
 
 const AdminModel = require('../models/admin_user.tsx');
 const TokenByDate = require('../models/token_by_date.tsx');
 const Transactions = require('../models/transaction.tsx');
-const EnvironmentDbModel = require('../models/environment_db.model.ts');
+const TokenPropertiesModel = require('../models/token-properties.model.ts');
 const User = require('../models/user.tsx');
 var bcrypt = require('bcrypt-nodejs');
 User.Promise = global.Promise;
@@ -334,32 +335,26 @@ exports.getTokenProperties = (req, res, next) => {
     AdminModel.findOne(function (err, token) {
         if (token != null) {
             return res.status(200).json({
-                TokenTotal: token.tokenTotal,
-                TokenStartTime: token.tokenStartTime,
-                FundInterest: token.fundInterest,
-                IntialShareValue: token.intialShareValue,
-                IntialPreFundValue: token.intialPreFundValue,
-                IntialEndingFundValue: token.intialEndingFundValue,
-                DepositFeeRate: token.depositFeeRate,
+                tokenTotal: token.tokenTotal,
+                tokenStartTime: token.tokenStartTime,
+                fundInterest: token.fundInterest,
+                intialShareValue: token.intialShareValue,
+                intialPreFundValue: token.intialPreFundValue,
+                intialEndingFundValue: token.intialEndingFundValue,
+                depositFeeRate: token.depositFeeRate,
             });
         } else return res.status(204).json();
     });
 };
 
 exports.setTokenProperties = (req, res, next) => {
-    EnvironmentDbModel.findOne(function (err, token) {
-        if (token != null) {
-            token.tokenTotal = req.body.TokenTotal;
-            token.tokenStartTime = req.body.TokenStartTime;
-            token.fundInterest = req.body.FundInterest;
-            token.intialShareValue = req.body.IntialShareValue;
-            token.intialPreFundValue = req.body.IntialPreFundValue;
-            token.intialEndingFundValue = req.body.IntialEndingFundValue;
-            token.depositFeeRate = req.body.DepositFeeRate;
-            token.save();
-            return res.status(200).json();
-        } else return res.status(204).json();
-    });
+    try {
+        TokenPropertiesService.updateTokenProperties(req.body);
+        return res.status(200).json();
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({error: e});
+    }
 };
 
 exports.createStartShareValue = async (req, res, next) => {
