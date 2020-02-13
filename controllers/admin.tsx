@@ -7,6 +7,7 @@ const TOKEN_PROPERTIES = require('../models/token-properties.ts').TOKEN_PROPERTI
 const AdminModel = require('../models/admin_user.tsx');
 const TokenByDate = require('../models/token_by_date.tsx');
 const Transactions = require('../models/transaction.tsx');
+const EnvironmentDbModel = require('../models/environment_db.model.ts');
 const User = require('../models/user.tsx');
 var bcrypt = require('bcrypt-nodejs');
 User.Promise = global.Promise;
@@ -330,7 +331,35 @@ exports.getShareValueForDates = async (req, res, next) => {
 };
 
 exports.getTokenProperties = (req, res, next) => {
-    return res.status(200).json(TOKEN_PROPERTIES);
+    AdminModel.findOne(function (err, token) {
+        if (token != null) {
+            return res.status(200).json({
+                TokenTotal: token.tokenTotal,
+                TokenStartTime: token.tokenStartTime,
+                FundInterest: token.fundInterest,
+                IntialShareValue: token.intialShareValue,
+                IntialPreFundValue: token.intialPreFundValue,
+                IntialEndingFundValue: token.intialEndingFundValue,
+                DepositFeeRate: token.depositFeeRate,
+            });
+        } else return res.status(204).json();
+    });
+};
+
+exports.setTokenProperties = (req, res, next) => {
+    EnvironmentDbModel.findOne(function (err, token) {
+        if (token != null) {
+            token.tokenTotal = req.body.TokenTotal;
+            token.tokenStartTime = req.body.TokenStartTime;
+            token.fundInterest = req.body.FundInterest;
+            token.intialShareValue = req.body.IntialShareValue;
+            token.intialPreFundValue = req.body.IntialPreFundValue;
+            token.intialEndingFundValue = req.body.IntialEndingFundValue;
+            token.depositFeeRate = req.body.DepositFeeRate;
+            token.save();
+            return res.status(200).json();
+        } else return res.status(204).json();
+    });
 };
 
 exports.createStartShareValue = async (req, res, next) => {
