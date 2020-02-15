@@ -332,19 +332,16 @@ exports.getShareValueForDates = async (req, res, next) => {
 };
 
 exports.getTokenProperties = (req, res, next) => {
-    AdminModel.findOne(function (err, token) {
-        if (token != null) {
-            return res.status(200).json({
-                tokenTotal: token.tokenTotal,
-                tokenStartTime: token.tokenStartTime,
-                fundInterest: token.fundInterest,
-                intialShareValue: token.intialShareValue,
-                intialPreFundValue: token.intialPreFundValue,
-                intialEndingFundValue: token.intialEndingFundValue,
-                depositFeeRate: token.depositFeeRate,
-            });
-        } else return res.status(204).json();
-    });
+    try {
+        TokenPropertiesModel.findOne(function (err, token) {
+            if (token != null) {
+                return res.status(200).json({token});
+            } else return res.status(204).json();
+        });
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({error: e});
+    }
 };
 
 exports.setTokenProperties = (req, res, next) => {
