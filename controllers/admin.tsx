@@ -344,13 +344,13 @@ exports.getTokenProperties = async (req, res, next) => {
 exports.setTokenProperties = async (req, res, next) => {
     try {
         const token = await TokenPropertiesService.getTokenProperties();
-        token.tokenTotal = ParameterParser.getIntegerParameter(req.body, 'tokenTotal', false) || token.tokenTotal;
-        token.tokenStartTime = ParameterParser.getDateParameter(req.body, 'tokenStartTime', false) || token.tokenStartTime;
-        token.fundInterest = ParameterParser.getFloatParameter(req.body, 'fundInterest', false) || token.fundInterest;
-        token.intialShareValue = ParameterParser.getFloatParameter(req.body, 'intialShareValue', false) || token.intialShareValue;
-        token.intialPreFundValue = ParameterParser.getFloatParameter(req.body, 'intialPreFundValue', false) || token.intialPreFundValue;
-        token.intialEndingFundValue = ParameterParser.getFloatParameter(req.body, 'intialEndingFundValue', false) || token.intialEndingFundValue;
-        token.depositFeeRate = ParameterParser.getFloatParameter(req.body, 'depositFeeRate', false) || token.depositFeeRate;
+        token.tokenTotal = CommonsService.isNullOrUnDefined(req.body.tokenTotal) ? token.tokenTotal : ParameterParser.getIntegerParameter(req.body.tokenTotal, 'tokenTotal', false);
+        token.tokenStartTime = CommonsService.isNullOrUnDefined(req.body.tokenStartTime) ? token.tokenStartTime : ParameterParser.getDateParameter(req.body.fun, 'tokenStartTime', false);
+        token.fundInterest = CommonsService.isNullOrUnDefined(req.body.fundInterest) ? token.fundInterest : ParameterParser.getFloatParameter(req.body, 'fundInterest', false);
+        token.intialShareValue = CommonsService.isNullOrUnDefined(req.body.intialShareValue) ? token.intialShareValue : ParameterParser.getFloatParameter(req.body, 'intialShareValue', false);
+        token.intialPreFundValue = CommonsService.isNullOrUnDefined(req.body.intialPreFundValue) ? token.intialPreFundValue : ParameterParser.getFloatParameter(req.body, 'intialPreFundValue', false);
+        token.intialEndingFundValue = CommonsService.isNullOrUnDefined(req.body.intialEndingFundValue) ? token.intialEndingFundValue : ParameterParser.getFloatParameter(req.body, 'intialEndingFundValue', false);
+        token.depositFeeRate = CommonsService.isNullOrUnDefined(req.body.depositFeeRate) ? token.depositFeeRate : ParameterParser.getFloatParameter(req.body, 'depositFeeRate', false);
         TokenPropertiesService.updateTokenProperties(token);
         return res.status(200).json();
     } catch (e) {
