@@ -91,7 +91,7 @@ exports.SetTokenPrice = (req, res, next) => {
             admin.TokenPrice = req.body.TokenPrice;
             admin.save();
             return res.status(200).json();
-        } else return res.stat(204).json();
+        } else return res.status(204).json();
     });
 };
 exports.GetTokenPrice = (req, res, next) => {
@@ -100,7 +100,7 @@ exports.GetTokenPrice = (req, res, next) => {
             return res.status(200).json({
                 TokenPrice: admin.TokenPrice
             });
-        } else return res.stat(204).json();
+        } else return res.status(204).json();
     });
 };
 exports.UpdatePassword = (req, res, next) => {
@@ -331,13 +331,10 @@ exports.getShareValueForDates = async (req, res, next) => {
     }
 };
 
-exports.getTokenProperties = (req, res, next) => {
+exports.getTokenProperties = async (req, res, next) => {
     try {
-        TokenPropertiesModel.findOne(function (err, token) {
-            if (token != null) {
-                return res.status(200).json({token});
-            } else return res.status(204).json();
-        });
+        const token = await TokenPropertiesService.getTokenProperties();
+        return res.status(200).json({token});
     } catch (e) {
         console.log(e);
         return res.status(500).json({error: e});
@@ -346,7 +343,16 @@ exports.getTokenProperties = (req, res, next) => {
 
 exports.setTokenProperties = (req, res, next) => {
     try {
-        TokenPropertiesService.updateTokenProperties(req.body);
+        const payload = req.body;
+        const tokenProperties = {tokenTotal:'', tokenStartTime:'', fundInterest:'', intialShareValue:'', intialPreFundValue:'', intialEndingFundValue:'', depositFeeRate:''};
+        tokenProperties.tokenTotal = ParameterParser.getIntegerParameter(payload, 'tokenTotal', true);
+        tokenProperties.tokenStartTime = ParameterParser.getDateParameter(payload, 'tokenStartTime', true);
+        tokenProperties.fundInterest = ParameterParser.getFloatParameter(payload, 'fundInterest', true);
+        tokenProperties.intialShareValue = ParameterParser.getFloatParameter(payload, 'intialShareValue', true);
+        tokenProperties.intialPreFundValue = ParameterParser.getFloatParameter(payload, 'intialPreFundValue', true);
+        tokenProperties.intialEndingFundValue = ParameterParser.getFloatParameter(payload, 'intialEndingFundValue', true);
+        tokenProperties.depositFeeRate = ParameterParser.getFloatParameter(payload, 'depositFeeRate', true);
+        TokenPropertiesService.updateTokenProperties(tokenProperties);
         return res.status(200).json();
     } catch (e) {
         console.log(e);

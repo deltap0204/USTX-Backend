@@ -16,6 +16,14 @@ class TokenPropertiesService {
         tokenProperties.depositFeeRate = tokenProps.depositFeeRate;
         return tokenProperties.save();
     }
+
+    async getTokenProperties() {
+        const result = await TokenPropertiesModel.findOne({});
+        if (result == null) {
+            throw new Error(`cannot find token properties`);
+        }
+        return result;
+    }
 }
 
 const TokenPropertiesServiceInstance = new TokenPropertiesService();
