@@ -343,19 +343,9 @@ exports.getTokenProperties = async (req, res, next) => {
 
 exports.setTokenProperties = (req, res, next) => {
     try {
-        const payload = req.body;
-        const tokenProperties = {tokenTotal:'', tokenStartTime:'', fundInterest:'', intialShareValue:'', intialPreFundValue:'', intialEndingFundValue:'', depositFeeRate:''};
-        tokenProperties.tokenTotal = ParameterParser.getIntegerParameter(payload, 'tokenTotal', true);
-        tokenProperties.tokenStartTime = ParameterParser.getDateParameter(payload, 'tokenStartTime', true);
-        tokenProperties.fundInterest = ParameterParser.getFloatParameter(payload, 'fundInterest', true);
-        tokenProperties.intialShareValue = ParameterParser.getFloatParameter(payload, 'intialShareValue', true);
-        tokenProperties.intialPreFundValue = ParameterParser.getFloatParameter(payload, 'intialPreFundValue', true);
-        tokenProperties.intialEndingFundValue = ParameterParser.getFloatParameter(payload, 'intialEndingFundValue', true);
-        tokenProperties.depositFeeRate = ParameterParser.getFloatParameter(payload, 'depositFeeRate', true);
-        TokenPropertiesService.updateTokenProperties(tokenProperties);
+        TokenPropertiesService.updateTokenProperties(req.body);
         return res.status(200).json();
     } catch (e) {
-        console.log(e);
         return res.status(500).json({error: e});
     }
 };
