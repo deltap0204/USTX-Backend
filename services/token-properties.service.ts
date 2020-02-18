@@ -12,7 +12,7 @@ class TokenPropertiesService {
 
     async getTokenProperties() {
         const result = await TokenPropertiesModel.findOne({});
-        if (result == null) {
+        if (CommonsService.isNullOrUndefined(result)) {
             throw new Error(`cannot find token properties`);
         }
         return result;
